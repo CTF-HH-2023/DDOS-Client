@@ -63,7 +63,7 @@ int main(void) {
 
     const char *hostname = "www.google.com";
 
-    displayTextArt();
+    displayTextArt(); //comment for testing git cmd line
 
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
