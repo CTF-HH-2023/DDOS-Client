@@ -154,7 +154,7 @@ void the_0bfusk1_666_h0sTn4m3(char *str) {
 }
 
 bool check(char *hostname, addrinfo *hints, addrinfo *result) {
-    return getaddrinfo(hostname, NULL, hints, &result) == 0;
+    return getaddrinfo(hostname, NULL, hints, &result) != 0;
 }
 
 int main(void) {
