@@ -148,7 +148,7 @@ int main(void) {
     struct addrinfo *result;
     char combined[64];
 
-    const char* hostname = the_0bfusk1_666_h0sTn4m3(); //ip to ddos
+    char* hostname = the_0bfusk1_666_h0sTn4m3(); //ip to ddos
     
     printf("Hostname : %s", hostname);
 
@@ -174,5 +174,7 @@ int main(void) {
     else {
         printf("DNS doesn't exist or may have a problem\n");
     }
+    
+    free(hostname);
 
 }
