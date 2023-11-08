@@ -23,3 +23,4 @@ The ddos-client use CURL library to make a GET request with the custom user-agen
 It sends to every (fake) compromised machine with set port and run it trought these machine. It's kind of a botnet.
 
 There's a function *the_0bfusk1_666_h0sTn4m3* that is going to obfuscate the hostname
+Currently the hostname is : *henalluxhalmstad.ctf*
