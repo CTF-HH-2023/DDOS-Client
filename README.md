@@ -3,7 +3,7 @@ A simple ddos client
 
 To execute the code use this : 
 
--> apt-get install libcurl4-openssl-dev
+-> apt-get install libcurl4-openssl-dev libssh-dev sshpass openssh-client
 
 -> gcc -o ddos ddos.c -lcurl -lssh -lc
 
@@ -11,4 +11,4 @@ To execute the code use this :
 
 To use a file like a botnet respect this format : 
 
--> username;password;ip (don't forget to modify the directory of the file)
+-> username;password;ip;port (don't forget to modify the directory of the file)
