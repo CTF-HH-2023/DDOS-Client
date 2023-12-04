@@ -117,7 +117,7 @@ CURL *get_curl(const char *hostname) {
 
     curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_PORT, 80);
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, "Russky rocket VP /poliakov 2.45"); //add custom user agent
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, "RedStarBrowser/3.0 (XK-256; Zarnitsa OS x86_64)"); //add custom user agent
 
     return curl;
 }
