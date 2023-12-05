@@ -111,7 +111,7 @@ bool pass(int argc, char *argv[]) {
         return false;
     }
 
-    return strncmp(FLAG, argv[0], 31) == 0 ? true : false;
+    return strncmp(FLAG, argv[0], 31) == 0;
 }
 
 /// Get the dns entry
