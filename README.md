@@ -7,7 +7,7 @@ To execute the code use this :
 
 -> apt-get install libcurl4-openssl-dev libssh-dev sshpass openssh-client
 
--> gcc -o ddos ddos.c -lcurl -lssh -lc
+-> gcc -o ddos ddos.c -lcurl
 
 -> ./ddos
 
