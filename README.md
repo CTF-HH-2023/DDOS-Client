@@ -25,4 +25,4 @@ It sends to every (fake) compromised machine with set port and run it trought th
 
 There's a function *the_0bfusk1_666_h0sTn4m3* that is going to obfuscate the hostname
 
-Currently the hostname is : *henalluxhalmstad.ctf*
+The hostname is : *wafflevikings.hh*
