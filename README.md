@@ -5,11 +5,11 @@
 
 To execute the code use this : 
 
--> apt-get install libcurl4-openssl-dev libssh-dev sshpass openssh-client
+-> apt-get install libcurl4-openssl-dev sshpass openssh-client
 
 -> gcc -o ddos ddos.c -lcurl
 
--> ./ddos
+-> ./ddos [The flag]
 
 To use a file like a botnet respect this format : 
 
