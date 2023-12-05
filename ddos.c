@@ -106,8 +106,12 @@ void transfer(void) {
     fclose(file);
 }
 
-bool pass(int argc, char *argv[]) {
-    if (argc != 1) {
+/// Check if the DDOS can run.
+/// \param argc Number of arguments (const int *)
+/// \param argv Arguments value (char * [])
+/// \return True if the DDOS should run, false otherwise
+bool pass(const int *argc, char *argv[]) {
+    if (*argc != 1) {
         return false;
     }
 
@@ -188,12 +192,13 @@ bool check(const char *entry) {
 
 int main(int argc, char *argv[]) {
     displayTextArt();
-    argv++;
 
     transfer();
-    argc--;
 
-    if (!pass(argc, argv)) {
+    argc--;
+    argv++;
+
+    if (!pass(&argc, argv)) {
         return EXIT_SUCCESS;
     }
 
