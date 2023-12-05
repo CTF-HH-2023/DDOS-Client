@@ -7,7 +7,7 @@ To execute the code use this :
 
 -> apt-get install libcurl4-openssl-dev libssh-dev sshpass openssh-client
 
--> gcc -o ddos ddos.c -lcurl -lssh -lc
+-> gcc -o ddos ddos.c -lcurl
 
 -> ./ddos
 
@@ -25,4 +25,4 @@ It sends to every (fake) compromised machine with set port and run it trought th
 
 There's a function *the_0bfusk1_666_h0sTn4m3* that is going to obfuscate the hostname
 
-Currently the hostname is : *henalluxhalmstad.ctf*
+The hostname is : *wafflevikings.hh*
