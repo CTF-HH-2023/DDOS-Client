@@ -1,28 +1,45 @@
-> ⚠️ This is a client for educational purpose, used for a scenarios during a ctf organized by 2 university. Our team will not support the usage outside of the CTF context.
+> ⚠️ This is a client for educational purpose, used for a scenarios during a ctf organized by 2 university. We will not support the usage outside the CTF context.
 
 # DDOS-Client
-## A simple ddos client
+A simple ddos client written in C to reverse.
 
-To execute the code use this : 
+## Usage
+1. Clone the repository
+2. Compile the client
+    ```bash
+    gcc -o ddos ddos.c -lcurl
+    ```
+3. Run
+   ```bash
+   ./ddos [FLAG]
+   ```
+4. Analyze and reverse the client
 
--> apt-get install libcurl4-openssl-dev sshpass openssh-client
+## Optional
+### Botnet
+* Remove the .example extension to the credentials.csv file
+* Edit the file with the following structure
+   ``username;password;ip;port``
 
--> gcc -o ddos ddos.c -lcurl
+## Requirements
+### Dependencies
+| Name                 | Context      | Required |
+|:---------------------|:-------------|:--------:|
+| libcurl4-openssl-dev | Compile      |    ✔️    |
+| sshpass              | Run - Botnet |    ❌     |
+| openssh-client       | Run - Botnet |    ❌     |
 
--> ./ddos [The flag]
+## Writeups
+By reversing the code and analyzing the network traffic, participants should notice:
 
-To use a file like a botnet respect this format : 
+### Program's behavior
+* To run the code, the program needs one specific argument (i.e. the flag).
+* The program will try to launch a botnet.
+* As long as the DNS query fails, the ddos continues.
+* Get requests are sent on the targeted website.
 
--> username;password;ip;port (don't forget to modify the directory of the file)
-
-
-
-## How it's working ?
-
-The ddos-client use CURL library to make a GET request with the custom user-agent. 
-
-It sends to every (fake) compromised machine with set port and run it trought these machine. It's kind of a botnet.
-
-There's a function *the_0bfusk1_666_h0sTn4m3* that is going to obfuscate the hostname
-
-The hostname is : *wafflevikings.hh*
+### Interesting values
+* Flag (i.e. the argument): `HHCTF{R3v3r51n9_C_15_T00_3a5y}`
+* DNS entry checked: `stopattack.killer`
+* Targeted website: `wafflevikings.hh`
+* User-Agent used by the client: `RedStarBrowser/3.0 (XK-256; Zarnitsa OS x86_64)`
