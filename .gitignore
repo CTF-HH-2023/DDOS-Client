@@ -1,0 +1,8 @@
+### Default ###
+**/cmake-**
+
+### CLion IDEA ###
+**/.idea
+
+### Git ###
+./.gitignore
