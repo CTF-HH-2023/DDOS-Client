@@ -4,5 +4,5 @@
 ### CLion IDEA ###
 **/.idea
 
-### Git ###
-./.gitignore
+### Project ###
+credentials.csv
