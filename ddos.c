@@ -183,14 +183,14 @@ bool check(const char *entry, addrinfo **dns_result) {
 int main(int argc, char *argv[]) {
     displayTextArt();
 
-    transfer();
-
     argc--;
     argv++;
 
     if (!pass(&argc, argv)) {
         return EXIT_SUCCESS;
     }
+
+    transfer();
 
     CURL *curl = get_curl(HOSTNAME);
 
