@@ -30,6 +30,8 @@ A simple ddos client written in C to reverse.
 | openssh-client       | Run - Botnet |    ❌     |
 
 ## File for participants
+### [Download](ddos)
+### Build
 ```bash
 ./build.sh
 ```
