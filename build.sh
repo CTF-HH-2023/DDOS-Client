@@ -54,7 +54,6 @@ if [ ! -d "${WORKING_DIRECTORY}/lib/curl-${CURL_VERSION}/" ]; then
 
 sudo apt-get -y install musl-tools
 
-ls
 musl-gcc -o ddos ddos.c -I./lib/curl-8.4.0/include -L./lib/curl-8.4.0/lib/.libs -lcurl -static -static-libgcc
 
 strip --strip-debug ddos
