@@ -29,6 +29,11 @@ A simple ddos client written in C to reverse.
 | sshpass              | Run - Botnet |    ❌     |
 | openssh-client       | Run - Botnet |    ❌     |
 
+## File for participants
+```bash
+./build.sh
+```
+
 ## Writeups
 By reversing the code and analyzing the network traffic, participants should notice:
 
